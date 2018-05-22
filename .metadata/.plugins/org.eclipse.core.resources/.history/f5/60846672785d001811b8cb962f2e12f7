@@ -1,0 +1,14 @@
+package com.wang.app;
+
+import com.google.gson.Gson;
+import com.wang.model.Student;
+
+public class Application {
+
+	public static void main(String[] args) {
+		Student student = new Student(001, "snow", "wurara");
+		System.out.println(student);
+		System.out.println(student.toJson());
+		
+	}
+}

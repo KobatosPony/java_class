@@ -1,0 +1,16 @@
+package com.wang.db;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+
+//获取连接对象
+
+public class DbHelper {
+	private static Connection conn;
+	
+	// 创建静态块
+	static {
+		conn = DriverManager.getConnection("jdbc:mysql://localhost/jdbctest?\" +\r\n" + 
+				"		                 \"user=root&password=8844248&useSSL=false")
+	}
+}

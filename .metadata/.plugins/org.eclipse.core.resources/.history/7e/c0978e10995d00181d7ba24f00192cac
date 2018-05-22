@@ -1,0 +1,60 @@
+package com.wang.app;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+import javax.jws.soap.SOAPBinding.Use;
+
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+
+import com.google.gson.Gson;
+import com.wang.model.Student;
+
+public class Application {
+
+	public static void main(String[] args) {
+//		Student student = new Student(001, "snow", "wurara");
+//		Gson gson = new Gson();
+//		String sJson = gson.toJson(student);
+//		System.out.println(sJson);
+//		
+//		System.out.println(gson.fromJson(sJson, Student.class));
+		
+		demo01();
+	}
+
+	private static void demo01() {
+		// 创建工作簿
+		HSSFWorkbook workbook = new HSSFWorkbook();
+		
+		// 创建sheet
+		Sheet sheet1 = workbook.createSheet();
+		Sheet sheet2 = workbook.createSheet();
+		Sheet sheet3 = workbook.createSheet("new sheet");
+		Sheet sheet4 = workbook.createSheet("renscanning");
+		
+		// 创建行单元
+		Row row1 = sheet1.createRow(0);
+		// 创建列单元
+		Cell cell1 = row1.createCell(0)
+		
+		FileOutputStream outputStream = null;
+		try {
+			outputStream = new FileOutputStream("test.xls");
+			workbook.write(outputStream);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			try {
+				outputStream.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+}

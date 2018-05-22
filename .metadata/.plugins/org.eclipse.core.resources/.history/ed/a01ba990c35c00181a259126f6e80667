@@ -1,0 +1,31 @@
+package com.wang.main;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+
+import com.wang.dao.StudentDao;
+import com.wang.db.DbHelper;
+import com.wang.object.Student;
+
+public class Application {
+
+	public static void main(String[] args) {
+		// 使用自定义的工具类
+		Connection conn = DbHelper.getConn();
+		
+		// 查询
+		StudentDao sdao = new StudentDao();
+		ArrayList<Student> sList = sdao.queryAllStudent();
+		for (String string : args) {
+			
+		}
+		// 新增
+		// 删除
+		// 修改
+		
+		
+	}
+}

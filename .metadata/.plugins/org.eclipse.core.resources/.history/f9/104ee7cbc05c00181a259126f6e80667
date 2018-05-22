@@ -1,0 +1,29 @@
+package com.wang.main;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+import com.wang.db.DbHelper;
+import com.wang.object.Student;
+
+public class Application {
+
+	public static void main(String[] args) {
+		// 使用自定义的工具类
+		Connection conn = DbHelper.getConn();
+		
+		try {
+			Statement stmt = conn.createStatement();
+			String sql = "";
+			ResultSet rSet = stmt.executeQuery(sql);
+			while(rSet.next()) {
+				Student student = new Student();
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+	}
+}

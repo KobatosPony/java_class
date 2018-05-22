@@ -1,0 +1,57 @@
+package com.wang.main;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.wang.dao.StudentDao;
+import com.wang.db.DbHelper;
+import com.wang.object.Student;
+
+public class Application {
+
+	public static void main(String[] args) {
+		// 使用自定义的工具类
+		Connection conn = DbHelper.getConn();
+		
+		// 查询
+		StudentDao sdao = new StudentDao();
+		List<Student> sList = sdao.queryAllStudent();
+		for (Student student : sList) {
+			System.out.println(student);
+		}
+		// 新增
+//		Student adStu = new Student("110", "大张伟", "男", "1975-03-02", "95031");
+//		boolean result = sdao.insertAStudent(adStu);
+//		if (result) {
+//			System.out.println("插入成功！");
+//		}
+//		else {
+//			System.out.println("插入失败！");
+//		}
+		
+		// 删除
+//		String sno = "110";
+//		boolean result = sdao.deleteAStudent(sno);
+//		if (result) {
+//			System.out.println("删除成功！");
+//		}
+//		else {
+//			System.out.println("删除失败！");
+//		}
+//		
+		// 修改
+		String sno = "110";
+		Student upStu = new Student("110", "小张伟", "女", "1975-03-02", "95031");
+		boolean result = sdao.updateAStudent(sno, upStu);
+//		if (result) {
+//			System.out.println("修改成功！");
+//		}
+//		else {
+//			System.out.println("修改失败！");
+//		}
+	}
+}

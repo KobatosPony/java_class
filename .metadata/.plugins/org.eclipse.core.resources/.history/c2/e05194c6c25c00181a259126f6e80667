@@ -1,0 +1,12 @@
+package com.wang.dao.imp;
+
+import java.awt.List;
+
+// 数据访问层接口，只做方法的声明
+public interface StudentDaoImp {
+	// 查询
+	public List<Student> queryAllStudent();
+	// 新增
+	// 修改
+	// 删除
+}

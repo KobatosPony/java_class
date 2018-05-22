@@ -1,0 +1,12 @@
+package com.wang.main;
+
+import java.sql.Connection;
+
+import com.wang.db.DbHelper;
+
+public class Application {
+
+	public static void main(String[] args) {
+		Connection conn = DbHelper.getConn();
+	}
+}

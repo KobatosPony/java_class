@@ -1,0 +1,5 @@
+package com.wang.dao.imp;
+
+public interface StudentDaoImp {
+
+}

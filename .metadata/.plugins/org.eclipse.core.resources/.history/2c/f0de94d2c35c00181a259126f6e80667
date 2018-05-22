@@ -1,0 +1,62 @@
+package com.wang.dao;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.wang.dao.imp.StudentDaoImp;
+import com.wang.db.DbHelper;
+import com.wang.object.Student;
+
+public class StudentDao implements StudentDaoImp{
+	static {
+		Connection conn = DbHelper.getConn();
+	}
+
+	@Override
+	public List<Student> queryAllStudent() {
+		
+		List<Student> sList = new ArrayList();
+		try {
+			Statement stmt = conn.createStatement();
+			String sql = "select * from student";
+			ResultSet rSet = stmt.executeQuery(sql);
+			while(rSet.next()) {
+				// 封装模型(数据表的记录映射对象)
+				Student student = new Student();
+				student.setSno(rSet.getString("sno"));
+				student.setSname(rSet.getString("sname"));
+				student.setSsex(rSet.getString("ssex"));
+				student.setSbirthday(rSet.getString("sbirthday"));
+				student.setSclass(rSet.getString("sclass"));
+				sList.add(student);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return sList;
+	}
+
+	@Override
+	public boolean insertAStudent(Student stu) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean updateAStudent(String sno, Student stu) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean deleteAStudent(String sno) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+}
