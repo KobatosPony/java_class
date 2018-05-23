@@ -1,0 +1,28 @@
+package com.j1801.dao;
+
+import com.j1801.model.User;
+
+public interface UserDao {
+	
+	/**
+	 * 注销用户
+	 * @param user 要注销的用户信息
+	 * @return 是否注销成功
+	 * */
+	public boolean delete_user(User user);
+	
+	/**
+	 * 注册用户
+	 * @param user 用户账号密码等信息
+	 * @return 是否注册成功
+	 * */
+	public boolean insert_user(User user);
+	
+	/**
+	 * 根据账号密码查询用户是否存在，用于验证登录
+	 * @param id 账号
+	 * @param password 密码
+	 * @return 查到的记录转换成对象返回
+	 * */
+	public User find_user(String id,String password);
+}
