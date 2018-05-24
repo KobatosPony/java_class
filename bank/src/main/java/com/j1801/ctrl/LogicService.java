@@ -52,10 +52,123 @@ public class LogicService {
 		}
 	}
 
+	// 用户登录的方法
 	public static void login(Scanner scan) {
-		// TODO Auto-generated method stub
+		System.out.println("请输入卡号:");
+		String id = scan.next();
+		System.out.println("请输入密码:");
+		String password = scan.next();
 		
+		User user = new UserDaoImp().find_user(id, password);
+		if (user != null) {
+			System.out.println("登录成功！");
+			while(true) {
+				loginSuccess(scan,user);
+			}
+		}else {
+			System.out.println("账号密码错误！");
+		}
 	}
+
+	private static void loginSuccess(Scanner scan,User user) {
+		System.out.println("==================");
+		System.out.println("请输入指令操作:");
+		System.out.println("1-余额查询");
+		System.out.println("2-修改密码");
+		System.out.println("3-存钱");
+		System.out.println("4-取钱");
+		System.out.println("5-转账");
+		System.out.println("6-历史记录");
+		System.out.println("7-退出系统");
+		
+		UserInfoDaoImp uid = new UserInfoDaoImp();
+		UserDaoImp ud = new UserDaoImp();
+		UserInfo userInfo = uid.getInfoByUser(user);
+		Integer op = scan.nextInt();
+		HistoryDaoImp hd = new HistoryDaoImp();
+		User toUser = null;
+		UserInfo toUserInfo = null;
+		History h = null;
+		
+		switch (op) {
+		case 1:
+			if (userInfo!=null) {
+				System.out.println(userInfo.getDmoney());
+			}
+			else {
+				System.out.println("出错了！");
+			}
+			break;
+		case 2:
+			System.out.println("请输入新密码:");
+			String newPassword = scan.next();
+			if (ud.updatePassword(newPassword,user)) {
+				System.out.println("修改成功！");
+				user.setPassword(newPassword);
+			}else {
+				System.out.println("修改失败！");
+			}
+			break;
+		case 3:
+			System.out.println("请输入存款金额:");
+			Double addMoney = scan.nextDouble();
+			
+			h = new History(null,3,addMoney,user.getId(),user.getId(),null);
+			if (uid.deposit(addMoney, userInfo) && hd.insert(h)) {
+				System.out.println("操作成功！");
+				userInfo.setDmoney(addMoney+userInfo.getDmoney());
+			}else {
+				System.out.println("操作失败！");
+			}
+			
+			break;
+		case 4:
+			System.out.println("请输入取款金额:");
+			Double reduceMoney = scan.nextDouble();
+			
+			h = new History(null,2,reduceMoney,user.getId(),user.getId(),null);
+			if (uid.drawMoney(reduceMoney, userInfo) && hd.insert(h)) {
+				System.out.println("操作成功！");
+				userInfo.setDmoney(userInfo.getDmoney()-reduceMoney);
+			}else {
+				System.out.println("操作失败！");
+			}
+			break;
+		case 5:
+			System.out.println("请输入转账对象账号:");
+			String toId = scan.next();
+			System.out.println("请输入转账金额:");
+			Double transMoney = scan.nextDouble();
+			
+			h = new History(null,4,transMoney,user.getId(),toId,null);
+			toUser = ud.find_user_byid(toId);
+			if (toUser==null) {
+				System.out.println("转账对象不存在！");
+			}else {
+				toUserInfo = uid.getInfoByUser(toUser);
+				boolean a_res = uid.drawMoney(transMoney, userInfo);
+				boolean b_res = uid.deposit(transMoney, toUserInfo);
+				if (a_res && b_res && hd.insert(h)) {
+					System.out.println("操作成功！");
+					userInfo.setDmoney(userInfo.getDmoney()-transMoney);
+				}else {
+					System.out.println("操作失败！");
+				}
+			}
+			
+			break;
+		case 6:
+			hd.displayHistory(10,user);
+			break;
+		case 7:
+			System.exit(0);
+			break;
+
+		default:
+			break;
+		}
+	}
+
 
 	public static void cancel(Scanner scan) {
 		// TODO Auto-generated method stub

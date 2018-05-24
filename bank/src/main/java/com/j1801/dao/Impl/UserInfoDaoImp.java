@@ -6,16 +6,52 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.j1801.dao.UserInfoDao;
+import com.j1801.model.User;
 import com.j1801.model.UserInfo;
 import com.wang.db.DbHelper;
 
 public class UserInfoDaoImp implements UserInfoDao{
+	public UserInfo getInfoByUser(User user) {
+		Connection connection = DbHelper.getConn();
+		PreparedStatement ptmt = null;
+		
+		String sql = "select * from userinfo where id=?";
+		try {
+			ptmt = connection.prepareStatement(sql);
+			ptmt.setInt(1, user.getuInfoId());
+			ResultSet rSet = ptmt.executeQuery();
+			while(rSet.next()) {
+				return new UserInfo(rSet.getInt("id"), rSet.getString("name"), 
+						rSet.getInt("sex"), rSet.getLong("mobile"), 
+						rSet.getString("address"), rSet.getDouble("dmoney"));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			if (ptmt!=null) {
+				try {
+					ptmt.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return null;
+	}
 	
 	public boolean insert(UserInfo userInfo) {
 		Connection connection = DbHelper.getConn();
 		PreparedStatement ptmt = null;
-		String sql = "insert into userinfo(name,sex,mobile,address,dmoney)"+
-				"values(?,?,?,?,?)";
+		String sql = "insert into userinfo(name,sex,mobile,address,dmoney)"
+				+"values(?,?,?,?,?)";
 		
 		try {
 			ptmt = connection.prepareStatement(sql);
@@ -59,7 +95,6 @@ public class UserInfoDaoImp implements UserInfoDao{
 		
 		try {
 			ptmt = connection.prepareStatement(sql);
-			System.out.println("dsd");
 			ptmt.setString(1, userInfo.getName());
 			ptmt.setInt(2, userInfo.getSex());
 			ptmt.setLong(3, userInfo.getMobile());
@@ -90,5 +125,83 @@ public class UserInfoDaoImp implements UserInfoDao{
 		}
 		return null;
 	}
-	
+
+	public boolean deposit(Double addMoney, UserInfo userInfo) {
+		Connection connection = DbHelper.getConn();
+		PreparedStatement ptmt = null;
+		String sql = "update userinfo set dmoney=? where id=?";
+		
+		try {
+			ptmt = connection.prepareStatement(sql);
+			ptmt.setDouble(1, userInfo.getDmoney()+addMoney);
+			ptmt.setInt(2, userInfo.getId());
+			if (ptmt.executeUpdate()>0) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			if (ptmt!=null) {
+				try {
+					ptmt.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return false;
+	}
+
+	public boolean drawMoney(Double reduceMoney, UserInfo userInfo) {
+		if (reduceMoney>userInfo.getDmoney()) {
+			return false;
+		}
+		else {
+			Connection connection = DbHelper.getConn();
+			PreparedStatement ptmt = null;
+			String sql = "update userinfo set dmoney=? where id=?";
+			
+			try {
+				ptmt = connection.prepareStatement(sql);
+				ptmt.setDouble(1, userInfo.getDmoney()-reduceMoney);
+				ptmt.setInt(2, userInfo.getId());
+				if (ptmt.executeUpdate()>0) {
+					return true;
+				}
+				else {
+					return false;
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} finally {
+				if (ptmt!=null) {
+					try {
+						ptmt.close();
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			return false;
+		}
+	}
 }

@@ -12,7 +12,9 @@ import com.wang.db.DbHelper;
 public class Application {
 
 	public static void main(String[] args) {
-		start();
+		while(true) {
+			start();
+		}
 	}
 	
 	private static void start() {

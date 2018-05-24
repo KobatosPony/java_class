@@ -3,8 +3,15 @@ package com.j1801.dao;
 import java.util.List;
 
 import com.j1801.model.History;
+import com.j1801.model.User;
 
 public interface HistoryDao {
+	/**
+	 * 显示历史操作
+	 * @param count 显示的条数
+	 * @param user	用户
+	 * */
+	public void displayHistory(Integer count,User user);
 	/**
 	 * 插入一个历史
 	 * @param history

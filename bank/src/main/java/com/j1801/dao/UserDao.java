@@ -3,6 +3,18 @@ package com.j1801.dao;
 import com.j1801.model.User;
 
 public interface UserDao {
+	/**
+	 * 查找用户，会返回用户。
+	 * @param id 用户id
+	 * */
+	public User find_user_byid(String id);
+	/**
+	 * 修改密码
+	 * @param newPassword 新密码
+	 * @param user 当前登录用户
+	 * @return 是否成功
+	 * */
+	public boolean updatePassword(String newPassword,User user);
 	
 	/**
 	 * 注销用户

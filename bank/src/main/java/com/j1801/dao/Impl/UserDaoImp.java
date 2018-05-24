@@ -56,7 +56,70 @@ public class UserDaoImp implements UserDao{
 	}
 
 	public User find_user(String id, String password) {
-		// TODO Auto-generated method stub
+		PreparedStatement pStatement = null;
+		Connection connection = DbHelper.getConn();
+		String sql = "select * from user where id=? and password=?";
+		try {
+			pStatement = connection.prepareStatement(sql);
+			pStatement.setString(1, id);
+			pStatement.setString(2, password);
+			ResultSet rSet = pStatement.executeQuery();
+			while(rSet.next()) {
+				User user = new User(rSet.getString("id"),rSet.getString("password"),rSet.getInt("uInfoId"));
+				return user;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			if (pStatement!=null) {
+				try {
+					pStatement.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return null;
+	}
+	
+	public User find_user_byid(String id) {
+		Connection connection = DbHelper.getConn();
+		PreparedStatement ptmt = null;
+		String sql = "select * from user where id=?";
+		try {
+			ptmt = connection.prepareStatement(sql);
+			ptmt.setString(1, id);
+			ResultSet rs = ptmt.executeQuery();
+			while(rs.next()) {
+				return new User(rs.getString("id"), rs.getString("password"), rs.getInt("uinfoid"));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			if (ptmt!=null) {
+				try {
+					ptmt.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		return null;
 	}
 	
@@ -76,6 +139,40 @@ public class UserDaoImp implements UserDao{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}finally {
+			if (ptmt!=null) {
+				try {
+					ptmt.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return false;
+	}
+
+	public boolean updatePassword(String newPassword,User user) {
+		Connection connection = DbHelper.getConn();
+		PreparedStatement ptmt = null;
+		String sql = "update user set password=? where id=?";
+		
+		try {
+			ptmt = connection.prepareStatement(sql);
+			ptmt.setString(1, newPassword);
+			ptmt.setString(2, user.getId());
+			if (ptmt.executeUpdate()>0) {
+				return true;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
 			if (ptmt!=null) {
 				try {
 					ptmt.close();
